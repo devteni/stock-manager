@@ -1,4 +1,5 @@
 const { urlencoded, json } = require('express');
+const apiRoutes = require('./routes/index.routes');
 const express = require('express');
 const app = express();
 
@@ -14,5 +15,7 @@ app.get('/', (req, res) => {
 app.get('*', (req, res) => {
     res.send('404 error! Route does not exist.'); 
 })
+
+app.use(apiRoutes);
 
 module.exports = app;
