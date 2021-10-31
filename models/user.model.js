@@ -27,6 +27,13 @@ const userSchema = new Schema({
     },
     access_token: {
         type: String
+    },
+    createdAt:{
+        type: Date,
+        default: Date.now()
+    },
+    modifiedAt: {
+        type: Date,
     }
 })
 
