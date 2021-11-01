@@ -72,7 +72,8 @@ exports.logIn = async(req, res, next) => {
         if(!existingUser) return res.status(400).json({ message: "User with this email does not exist in the database"});
 
         // verify user's password
-        const pass = bcrypt.compare(password, existingUser.password);
+        const pass = await bcrypt.compare(password, existingUser.password);
+        console.log(pass)
         if(!pass) return res.status(401).json({ message: "Incorrect password!" });
 
         // create access token for user.
