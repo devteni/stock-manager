@@ -12,11 +12,13 @@ app.get('/', verifyToken, (req, res) => {
     res.send('Welcome to the stock manager app.');
 });
 
+app.use(apiRoutes);
+
 // handle unknown routes
 app.get('*', (req, res) => {
     res.send('404 error! Route does not exist.'); 
 })
 
-app.use(apiRoutes);
+
 
 module.exports = app;
