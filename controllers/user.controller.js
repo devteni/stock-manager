@@ -65,25 +65,27 @@ exports.addAssets = async(req, res, next) => {
         const { id } = userID;
 
         // check if user has the same asset in db and update
-        const existingAsset = await Asset.findOneAndUpdate({ 
-            userId: id, 
+        const existingAsset = await Asset.findOne({
             symbol: asset_details.symbol });
-        if(existingAsset){
+            console.log(existingAsset)
+        if(existingAsset != null && existingAsset.symbol === asset_details.symbol){
             existingAsset.totalQuantity += asset_details.totalQuantity;
             existingAsset.equityValue += asset_details.equityValue;
 
             await existingAsset.save();
             return res.status(200).json({ status: 'success', message: `${asset_details.totalQuantity}${asset_details.symbol} successfully added to your portfolio.`})
         }
-        const newAsset = await Asset.create({
-            userId: id,
-            ...asset_details
-        })
-
-        // store assets in db for user
-        await newAsset.save();
-        return res.status(200).json({ status: 'success', message: `${asset_details.totalQuantity}${asset_details.symbol} successfully added to your portfolio.`})
-    } catch(error){
+        else{
+            const newAsset = await Asset.create({
+                userId: id,
+                ...asset_details
+            })
+    
+            // store assets in db for user
+            await newAsset.save();
+            return res.status(200).json({ status: 'success', message: `${asset_details.totalQuantity}${asset_details.symbol} successfully added to your portfolio.`})    
+        }
+        } catch(error){
         throw new AppError('Error while adding assets', 500);
     }
 }
@@ -108,7 +110,7 @@ exports.viewPortfolio = async(req, res, next) => {
         throw new AppError('Error while pulling portfolio records', 500);
 
     }
-}
+};
 
 
 exports.viewLoanProfile = async(req, res, next) => {
