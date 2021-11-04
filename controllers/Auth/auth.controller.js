@@ -1,10 +1,10 @@
-const User = require('../models/user.model');
+const User = require('../../models/user.model');
 // const speakeasy = require('speakeasy');
 const bcrypt = require('bcryptjs');
-const logger = require('../utils/logger');
-const sendOTP = require('../services/sendOTP.service');
-const AppError = require('../utils/AppError');
-const { createToken } = require('../services/token.service');
+const logger = require('../../utils/logger');
+const sendOTP = require('../../services/sendOTP.service');
+const AppError = require('../../utils/AppError');
+const { createToken } = require('../../services/token.service');
 
 exports.signUp = async(req, res, next) => {
     // try{
