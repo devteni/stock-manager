@@ -5,7 +5,7 @@ const router = Router();
 
 router.get('/profile', verifyToken, viewProfile);
 router.post('/profile', verifyToken, updateProfile);
-router.post('/portfolio/add', addAssets);
+router.post('/portfolio/add', verifyToken, addAssets);
 router.get('/portfolio', verifyToken, viewPortfolio)
 router.get('/loan', verifyToken, viewLoanProfile);
 
