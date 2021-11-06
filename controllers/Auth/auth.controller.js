@@ -53,7 +53,7 @@ exports.signUp = async(req, res, next) => {
     await newUser.save();
     return res.status(200).json({ 
         status: 'success',
-        payload: newUser,
+        data: newUser,
         message: 'Account created successfully, proceed to logging in and adding your portfolio record'});
     // } catch(error){
     //     console.log(new AppError(`An error occured while creating user: ${error}`, 500));
@@ -84,7 +84,7 @@ exports.logIn = async(req, res, next) => {
         // update access token
         existingUser.access_token = access_token;
 
-        return res.status(200).json({ message: 'login successful!', access_token})
+        return res.status(200).json({ status: 'success', message: 'login successful!', access_token})
     } catch (error) {
         throw new AppError('Error while logging in', 500);
     }
