@@ -4,7 +4,9 @@ const { createLogger, format, transports } = require('winston');
 const { combine, timestamp: timestampFn, printf, prettyPrint } = format;
 
 // Format function
-const myFormat = printf(({ level, message, timestamp }) => `${timestamp} - ${level}: ${message}`);
+const myFormat = printf(
+  ({ level, message, timestamp }) => `${timestamp} - ${level}: ${message}`,
+);
 
 // Transport for writing error logs
 const errorTransport = new transports.File({
@@ -37,7 +39,7 @@ const logger = createLogger({
     format.colorize(),
     format.json({
       space: 2,
-    })
+    }),
   ),
 });
 
@@ -47,12 +49,16 @@ if (process.env.NODE_ENV !== 'production') {
     new transports.Console({
       handleExceptions: true,
       format: combine(timestampFn(), myFormat),
-    })
+    }),
   );
 }
 
 if (process.env.NODE_ENV === 'production') {
-  logger.add(errorTransport).add(infoTransport).add(exceptionsTransport).add(rejectionsTransport);
+  logger
+    .add(errorTransport)
+    .add(infoTransport)
+    .add(exceptionsTransport)
+    .add(rejectionsTransport);
 }
 
 // Log any errors the logger, itself, might have, to prevent uncaught exceptions

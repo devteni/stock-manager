@@ -6,11 +6,11 @@ const { PORT } = process.env;
 
 const server = http.createServer(app);
 
-const runServer = async() => {
-    database();
-    server.listen(PORT, () => {
-        console.log(`Server is running on port ${PORT}`);
-    });
-}
+const runServer = async () => {
+  database();
+  server.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
+};
 
 runServer();
