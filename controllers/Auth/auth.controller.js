@@ -4,10 +4,10 @@ const bcrypt = require('bcryptjs');
 const logger = require('../../utils/logger');
 // const sendOTP = require('../../utils/sendOTP');
 const AppError = require('../../utils/AppError');
-const { createToken } = require('../../services/token.service');
+const { createToken } = require('../../utils/token');
 
 exports.signUp = async (req, res, next) => {
-  // try{
+  try{
   // recieve input values
   logger.info(`We in the signup boy`);
   let user_details = req.body;
@@ -49,7 +49,7 @@ exports.signUp = async (req, res, next) => {
   // create JWT for user
   let access_token = createToken(newUser);
   if (!access_token)
-    return new AppError('Error while creating access token', 500);
+    return new AppError(`Error while creating access token: ${error}`, 500);
 
   newUser.access_token = access_token;
 
@@ -61,10 +61,10 @@ exports.signUp = async (req, res, next) => {
     message:
       'Account created successfully, proceed to logging in and adding your portfolio record',
   });
-  // } catch(error){
-  //     console.log(new AppError(`An error occured while creating user: ${error}`, 500));
-  //     process.exit(1);
-  // }
+  } catch(error){
+      console.log(new AppError(`An error occured while creating user: ${error}`, 500));
+      process.exit(1);
+  }
 };
 
 exports.logIn = async (req, res, next) => {
@@ -87,7 +87,7 @@ exports.logIn = async (req, res, next) => {
     // create access token for user.
     let access_token = createToken(existingUser);
     if (!access_token)
-      return new AppError('Error while creating access token', 500);
+      return new AppError(`Error while creating access token: ${error}`, 500);
 
     logger.info(`Are we here?`);
     // update access token
@@ -97,6 +97,6 @@ exports.logIn = async (req, res, next) => {
       .status(200)
       .json({ status: 'success', message: 'login successful!', access_token });
   } catch (error) {
-    throw new AppError('Error while logging in', 500);
+    throw new AppError(`Error while logging in: ${error}`, 500);
   }
 };
