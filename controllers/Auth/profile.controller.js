@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs');
 const AppError = require('../../utils/AppError');
-const { decodeUserWithToken } = require('../../services/token.service');
+const { decodeUserWithToken } = require('../../utils/token');
 const User = require('../../models/user.model');
 
 /* Profile controllers */
@@ -14,7 +14,7 @@ exports.viewProfile = async (req, res, next) => {
     // send decoded user details to client
     return res.status(200).json({ status: 'success', data });
   } catch (error) {
-    console.log(new AppError('Error while fetching user details', 500));
+    throw new AppError(`Error while fetching user details: ${error}`, 500));
   }
 };
 
@@ -44,6 +44,6 @@ exports.updateProfile = async (req, res, next) => {
         .json({ status: 'success', message: 'Profile updated!', data: user });
     }
   } catch (error) {
-    throw new AppError('Error while updating profile', 500);
+    throw new AppError(`Error while updating profile: ${error}`, 500);
   }
 };
