@@ -1,4 +1,4 @@
-const { decodeToken } = require('../services/token.service');
+const { decodeToken } = require('../utils/token');
 
 const verifyToken = (req, res, next) => {
   // get authorization token from header or body or query
