@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const moment = require('moment');
 const { Schema, model } = mongoose;
 
 const loanSchema = new Schema({
@@ -13,21 +14,28 @@ const loanSchema = new Schema({
     type: Number,
     required: true,
   },
+  loanInterest: {
+    type: Number,
+    default: 20
+  },
+  repaymentAmount:{
+    type: Number
+  },
   monthlyRepayment: {
     type: Number,
   },
-  loanInterest: {
-    type: Number,
+  amountPaid:{
+    type: Number
   },
   dateApplied: {
-    type: Date,
-    default: Date.now(),
+    type: String,
+    default: moment().format('MMMM Do YYYY, h:mm:ss a')
   },
   dueDate: {
     type: Date,
   },
   loanStatus:{
-    type: Boolean,
+    type: String,
     default: 'Not paid',
     enum: [ 'Not paid', 'paid' ]
   }
