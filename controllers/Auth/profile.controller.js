@@ -14,7 +14,7 @@ exports.viewProfile = async (req, res, next) => {
     // send decoded user details to client
     return res.status(200).json({ status: 'success', data });
   } catch (error) {
-    throw new AppError(`Error while fetching user details: ${error}`, 500));
+    throw new AppError(`Error while fetching user details: ${error}`, 500);
   }
 };
 
