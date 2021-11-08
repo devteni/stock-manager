@@ -16,29 +16,33 @@ const loanSchema = new Schema({
   },
   loanInterest: {
     type: Number,
-    default: 20
+    default: 20,
   },
-  repaymentAmount:{
-    type: Number
+  repaymentAmount: {
+    type: Number,
   },
   monthlyRepayment: {
     type: Number,
   },
-  amountPaid:{
-    type: Number
+  amountPaid: {
+    type: Number,
+    default: 0,
   },
   dateApplied: {
     type: String,
-    default: moment().format('MMMM Do YYYY, h:mm:ss a')
+    default: moment().format('MMMM Do YYYY, h:mm:ss a'),
   },
   dueDate: {
     type: Date,
   },
-  loanStatus:{
+  loanStatus: {
     type: String,
     default: 'Not paid',
-    enum: [ 'Not paid', 'paid' ]
-  }
+    enum: ['Not paid', 'paid'],
+  },
+  periodLeft: {
+    type: Number,
+  },
 });
 
 const loan = model('loan', loanSchema);
