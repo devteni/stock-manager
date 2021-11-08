@@ -1,6 +1,10 @@
 const { Router } = require('express');
 const verifyToken = require('../middlewares/verifyToken');
-const { viewLoanProfile, getLoan } = require('../controllers/Loan/loan.controller');
+const {
+  viewLoanProfile,
+  getLoan,
+  payLoan,
+} = require('../controllers/Loan/loan.controller');
 const {
   viewProfile,
   updateProfile,
@@ -15,7 +19,8 @@ router.get('/profile', verifyToken, viewProfile);
 router.post('/profile', verifyToken, updateProfile);
 router.post('/portfolio/add', verifyToken, addAssets);
 router.get('/portfolio', verifyToken, viewPortfolio);
-router.post('/loan/apply', verifyToken, getLoan)
+router.post('/loan/apply', verifyToken, getLoan);
+router.post('/loan/pay', verifyToken, payLoan);
 router.get('/loan', verifyToken, viewLoanProfile);
 
 module.exports = router;

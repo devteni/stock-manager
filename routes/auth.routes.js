@@ -5,5 +5,4 @@ const router = Router();
 router.post('/signup', signUp);
 router.post('/login', logIn);
 
-
 module.exports = router;
