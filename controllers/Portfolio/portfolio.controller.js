@@ -41,7 +41,7 @@ exports.addAssets = async (req, res) => {
       });
     }
   } catch (error) {
-    throw new AppError('Error while adding assets', 500);
+    throw new AppError(`Error while adding assets: ${error}`, 500);
   }
 };
 
@@ -56,12 +56,16 @@ exports.viewPortfolio = async (req, res) => {
     const { id } = userID;
 
     // condition to get just the portfolio value
-    if(check_value === 'true'){
+    if (check_value === 'true') {
       const portfolioVal = await getPortfolioValue(id);
-      if(portfolioVal != null){
-        return res.status(200).json({ status: 'success', message:'Your portfolio value:', data: portfolioVal });
-      } else{
-        throw new AppError(`Error while getting portfolio value`, 500);
+      if (portfolioVal != null) {
+        return res.status(200).json({
+          status: 'success',
+          message: 'Your portfolio value:',
+          data: portfolioVal,
+        });
+      } else {
+        throw new AppError(`Error while getting portfolio value: ${error}`, 500);
       }
     }
 
@@ -74,8 +78,10 @@ exports.viewPortfolio = async (req, res) => {
       });
     }
 
-    return res.status(200).json({ status: 'success', message: 'Your portfolio:', data: portfolio });
+    return res
+      .status(200)
+      .json({ status: 'success', message: 'Your portfolio:', data: portfolio });
   } catch (error) {
-    throw new AppError('Error while pulling portfolio records', 500);
+    throw new AppError(`Error while pulling portfolio records: ${error}`, 500);
   }
 };
