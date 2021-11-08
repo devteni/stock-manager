@@ -4,11 +4,10 @@ const AppError = require('./AppError');
 const { transporter } = require('./transporter');
 
 const emailNotif = (action, email) => {
-    try{
-        
-    } catch(error){
-        throw new AppError('Error while sending email notification', 500)
-    }
-}
+  try {
+  } catch (error) {
+    throw new AppError(`Error while sending email notification: ${error}`, 500);
+  }
+};
 
 module.exports = { emailNotif };
