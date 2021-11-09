@@ -108,15 +108,13 @@ exports.payLoan = async (req, res) => {
         currentLoan.periodLeft =
           currentLoan.loanPeriod - currentLoan.amountPaid / monthlyRepayment;
         // await currentLoan.save();
-        res
-          .status(200)
-          .json({
-            status: 'success',
-            message: `Successfully paid part for month ${
-              loanPeriod - currentLoan.periodLeft
-            }`,
-            data: currentLoan,
-          });
+        res.status(200).json({
+          status: 'success',
+          message: `Successfully paid part for month ${
+            loanPeriod - currentLoan.periodLeft
+          }`,
+          data: currentLoan,
+        });
       } else {
         res.status(400).json({
           message:
@@ -129,13 +127,11 @@ exports.payLoan = async (req, res) => {
       // check if loan has been completely paid
       if (currentLoan.repaymentAmount == currentLoan.amountPaid) {
         currentLoan.loanStatus = 'paid';
-        res
-          .status(200)
-          .json({
-            status: 'success',
-            message:
-              'Your loan has been balanced. You may apply for another now.',
-          });
+        res.status(200).json({
+          status: 'success',
+          message:
+            'Your loan has been balanced. You may apply for another now.',
+        });
       }
     }
     await currentLoan.save();
