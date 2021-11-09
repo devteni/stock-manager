@@ -40,7 +40,14 @@
     "jest": "^27.3.1",
     "lint-staged": "^11.2.6",
     "nodemon": "^2.0.14",
-    "prettier": "^2.4.1"
+    "prettier": "^2.4.1",
+    "supertest": "^6.1.6"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ]
   },
   "husky": {
     "hooks": {
