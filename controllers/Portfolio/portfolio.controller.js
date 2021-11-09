@@ -65,7 +65,10 @@ exports.viewPortfolio = async (req, res) => {
           data: portfolioVal,
         });
       } else {
-        throw new AppError(`Error while getting portfolio value: ${error}`, 500);
+        throw new AppError(
+          `Error while getting portfolio value: ${error}`,
+          500,
+        );
       }
     }
 
