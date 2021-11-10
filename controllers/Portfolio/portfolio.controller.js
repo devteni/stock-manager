@@ -6,9 +6,10 @@ const {
   updateExistingAsset,
 } = require('../../services/asset.service');
 const { getPortfolioValue } = require('../../services/portfolio.service');
+const catchAsync = require('../../utils/catchAsync');
 
 /* Portfolio controllers */
-exports.addAssets = catchAsync(async(req, res) => {
+exports.addAssets = catchAsync(async (req, res) => {
   try {
     // get assets from req.body
     const asset_details = req.body;
@@ -23,13 +24,12 @@ exports.addAssets = catchAsync(async(req, res) => {
     const existingAsset = await Asset.findOne({
       symbol: asset_details.symbol,
     });
-    console.log(existingAsset);
     if (
       existingAsset != null &&
       existingAsset.symbol === asset_details.symbol
     ) {
       await updateExistingAsset(existingAsset, asset_details);
-      return res.status(200).json({
+      return res.status(204).json({
         status: 'success',
         message: `${asset_details.totalQuantity}${asset_details.symbol} successfully added to your portfolio.`,
       });
@@ -45,7 +45,7 @@ exports.addAssets = catchAsync(async(req, res) => {
   }
 });
 
-exports.viewPortfolio = catchAsync(async(req, res) => {
+exports.viewPortfolio = catchAsync(async (req, res) => {
   try {
     const { check_value } = req.query;
 
@@ -59,16 +59,13 @@ exports.viewPortfolio = catchAsync(async(req, res) => {
     if (check_value === 'true') {
       const portfolioVal = await getPortfolioValue(id);
       if (portfolioVal != null) {
-        return res.status(200).json({
+        return res.status(201).json({
           status: 'success',
           message: 'Your portfolio value:',
           data: portfolioVal,
         });
       } else {
-        throw new AppError(
-          `Error while getting portfolio value: ${error}`,
-          500,
-        );
+        throw new AppError(`Error while getting portfolio value`, 500);
       }
     }
 

@@ -7,7 +7,7 @@ const AppError = require('../../utils/AppError');
 const { createToken } = require('../../utils/token');
 const catchAsync = require('../../utils/catchAsync');
 
-exports.signUp = catchAsync(async(req, res, next) => {
+exports.signUp = catchAsync(async (req, res, next) => {
   try {
     // recieve input values
     logger.info(`We in the signup boy`);
@@ -19,10 +19,10 @@ exports.signUp = catchAsync(async(req, res, next) => {
     const existingUser = await User.findOne({ email: user_details.email });
     if (existingUser)
       return res
-        .status(401)
+        .status(409)
         .json({ message: 'User with this email already exists ' });
 
-    const salt = await bcrypt.genSalt(10);
+    const salt = await bcrypt.gsenSalt(10);
     const hashedPass = await bcrypt.hash(user_details.password, salt);
     const newUser = await User.create({
       firstname: user_details.firstname,
@@ -63,14 +63,11 @@ exports.signUp = catchAsync(async(req, res, next) => {
         'Account created successfully, proceed to logging in and adding your portfolio record',
     });
   } catch (error) {
-    console.log(
-      new AppError(`An error occured while creating user: ${error}`, 500),
-    );
-    process.exit(1);
+    throw new AppError(`An error occured while creating user: ${error}`, 500);
   }
 });
 
-exports.logIn = catchAsync(async(req, res, next) => {
+exports.logIn = catchAsync(async (req, res, next) => {
   try {
     // get user credentials
     const { email, password } = req.body;
@@ -84,7 +81,6 @@ exports.logIn = catchAsync(async(req, res, next) => {
 
     // verify user's password
     const pass = await bcrypt.compare(password, existingUser.password);
-    console.log(pass);
     if (!pass) return res.status(401).json({ message: 'Incorrect password!' });
 
     // create access token for user.

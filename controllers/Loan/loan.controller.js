@@ -1,15 +1,15 @@
 const AppError = require('../../utils/AppError');
 const { decodeUserWithToken } = require('../../utils/token');
-const Asset = require('../../models/asset.model');
 const {
   applyForLoan,
   outstandingLoanExists,
   pullLoanDetails,
 } = require('../../services/loan.service');
 const { getPortfolioValue } = require('../../services/portfolio.service');
+const catchAsync = require('../../utils/catchAsync');
 
 /* Loan controllers */
-exports.getLoan = async (req, res) => {
+exports.getLoan = catchAsync(async (req, res) => {
   try {
     // get loan details
     const loanDetails = req.body;
@@ -53,9 +53,9 @@ exports.getLoan = async (req, res) => {
   } catch (error) {
     throw new AppError(`Error while applying for loan: ${error}`, 500);
   }
-};
+});
 
-exports.viewLoanProfile = catchAsync(async(req, res) => {
+exports.viewLoanProfile = catchAsync(async (req, res) => {
   try {
     let token =
       req.body.token || req.query.token || req.headers['x-access-token'];
@@ -71,7 +71,7 @@ exports.viewLoanProfile = catchAsync(async(req, res) => {
         data: currentLoan,
       });
     }
-    return res.status(200).json({
+    return res.status(204).json({
       status: 'success',
       message: 'You have no active loan',
       data: [],
@@ -81,7 +81,7 @@ exports.viewLoanProfile = catchAsync(async(req, res) => {
   }
 });
 
-exports.payLoan = catchAsync(async(req, res) => {
+exports.payLoan = catchAsync(async (req, res) => {
   try {
     const loanPayment = req.body;
     const { amount } = loanPayment;
@@ -98,17 +98,16 @@ exports.payLoan = catchAsync(async(req, res) => {
       monthlyRepayment,
       amountPaid,
       loanPeriod,
-      periodLeft,
     } = currentLoan;
-    if (loanStatus != 'paid' && amountPaid != repaymentAmount) {
-      // proceed to check the amount to be paid and make sure it is the same as the monthly repayment.
-      if (amount == monthlyRepayment) {
+    if (loanStatus !== 'paid' && amountPaid !== repaymentAmount) {
+      // proceed to check the amount to be paid
+      if (amount === monthlyRepayment) {
         // add amount to loan.amountPaid
         currentLoan.amountPaid += amount;
         currentLoan.periodLeft =
           currentLoan.loanPeriod - currentLoan.amountPaid / monthlyRepayment;
         // await currentLoan.save();
-        res.status(200).json({
+        res.status(201).json({
           status: 'success',
           message: `Successfully paid part for month ${
             loanPeriod - currentLoan.periodLeft
@@ -116,18 +115,17 @@ exports.payLoan = catchAsync(async(req, res) => {
           data: currentLoan,
         });
       } else {
-        res.status(400).json({
+        res.status(409).json({
           message:
             'Repayment amount selected not equal to the required repayment amount',
         });
       }
-      console.log('hey');
       return;
     } else {
       // check if loan has been completely paid
-      if (currentLoan.repaymentAmount == currentLoan.amountPaid) {
+      if (currentLoan.repaymentAmount === currentLoan.amountPaid) {
         currentLoan.loanStatus = 'paid';
-        res.status(200).json({
+        res.status(201).json({
           status: 'success',
           message:
             'Your loan has been balanced. You may apply for another now.',

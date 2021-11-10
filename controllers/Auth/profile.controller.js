@@ -5,7 +5,7 @@ const User = require('../../models/user.model');
 const catchAsync = require('../../utils/catchAsync');
 
 /* Profile controllers */
-exports.viewProfile = catchAsync(async(req, res, next) => {
+exports.viewProfile = catchAsync(async (req, res) => {
   try {
     let token =
       req.body.token || req.query.token || req.headers['x-access-token'];
@@ -19,14 +19,14 @@ exports.viewProfile = catchAsync(async(req, res, next) => {
   }
 });
 
-exports.updateProfile = catchAsync(async(req, res, next) => {
+exports.updateProfile = catchAsync(async (req, res) => {
   try {
     const { action } = req.query;
     let token =
       req.body.token || req.query.token || req.headers['x-access-token'];
     const userID = decodeUserWithToken(token);
     const { id } = userID;
-    if (action == 'edit') {
+    if (action === 'edit') {
       const updatedData = req.body;
 
       // check if password is to be updated
