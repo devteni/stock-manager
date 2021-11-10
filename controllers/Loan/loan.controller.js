@@ -55,7 +55,7 @@ exports.getLoan = async (req, res) => {
   }
 };
 
-exports.viewLoanProfile = async (req, res) => {
+exports.viewLoanProfile = catchAsync(async(req, res) => {
   try {
     let token =
       req.body.token || req.query.token || req.headers['x-access-token'];
@@ -79,9 +79,9 @@ exports.viewLoanProfile = async (req, res) => {
   } catch (error) {
     throw new AppError(`Error while getting loan profile: ${error}`, 500);
   }
-};
+});
 
-exports.payLoan = async (req, res) => {
+exports.payLoan = catchAsync(async(req, res) => {
   try {
     const loanPayment = req.body;
     const { amount } = loanPayment;
@@ -142,4 +142,4 @@ exports.payLoan = async (req, res) => {
       500,
     );
   }
-};
+});

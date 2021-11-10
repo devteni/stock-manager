@@ -8,7 +8,7 @@ const {
 const { getPortfolioValue } = require('../../services/portfolio.service');
 
 /* Portfolio controllers */
-exports.addAssets = async (req, res) => {
+exports.addAssets = catchAsync(async(req, res) => {
   try {
     // get assets from req.body
     const asset_details = req.body;
@@ -43,9 +43,9 @@ exports.addAssets = async (req, res) => {
   } catch (error) {
     throw new AppError(`Error while adding assets: ${error}`, 500);
   }
-};
+});
 
-exports.viewPortfolio = async (req, res) => {
+exports.viewPortfolio = catchAsync(async(req, res) => {
   try {
     const { check_value } = req.query;
 
@@ -87,4 +87,4 @@ exports.viewPortfolio = async (req, res) => {
   } catch (error) {
     throw new AppError(`Error while pulling portfolio records: ${error}`, 500);
   }
-};
+});

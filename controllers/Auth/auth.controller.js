@@ -5,8 +5,9 @@ const logger = require('../../utils/logger');
 // const sendOTP = require('../../utils/sendOTP');
 const AppError = require('../../utils/AppError');
 const { createToken } = require('../../utils/token');
+const catchAsync = require('../../utils/catchAsync');
 
-exports.signUp = async (req, res, next) => {
+exports.signUp = catchAsync(async(req, res, next) => {
   try {
     // recieve input values
     logger.info(`We in the signup boy`);
@@ -67,9 +68,9 @@ exports.signUp = async (req, res, next) => {
     );
     process.exit(1);
   }
-};
+});
 
-exports.logIn = async (req, res, next) => {
+exports.logIn = catchAsync(async(req, res, next) => {
   try {
     // get user credentials
     const { email, password } = req.body;
@@ -101,4 +102,4 @@ exports.logIn = async (req, res, next) => {
   } catch (error) {
     throw new AppError(`Error while logging in: ${error}`, 500);
   }
-};
+});

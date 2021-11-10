@@ -2,9 +2,10 @@ const bcrypt = require('bcryptjs');
 const AppError = require('../../utils/AppError');
 const { decodeUserWithToken } = require('../../utils/token');
 const User = require('../../models/user.model');
+const catchAsync = require('../../utils/catchAsync');
 
 /* Profile controllers */
-exports.viewProfile = async (req, res, next) => {
+exports.viewProfile = catchAsync(async(req, res, next) => {
   try {
     let token =
       req.body.token || req.query.token || req.headers['x-access-token'];
@@ -16,9 +17,9 @@ exports.viewProfile = async (req, res, next) => {
   } catch (error) {
     throw new AppError(`Error while fetching user details: ${error}`, 500);
   }
-};
+});
 
-exports.updateProfile = async (req, res, next) => {
+exports.updateProfile = catchAsync(async(req, res, next) => {
   try {
     const { action } = req.query;
     let token =
@@ -46,4 +47,4 @@ exports.updateProfile = async (req, res, next) => {
   } catch (error) {
     throw new AppError(`Error while updating profile: ${error}`, 500);
   }
-};
+});
