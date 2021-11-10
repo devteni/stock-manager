@@ -1,0 +1,126 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Stock manager API
+  description: This API represents the core of the stock manager API
+paths: {}
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/devteni/stock-manager-API/1.0.0
+# tags in the system
+tags:
+  - name: Auth
+    description: Endpoint for managing all the authentication processes in the system
+    externalDocs:
+      url: https://app.swaggerhub.com/apis-docs/devteni/stock-manager-API/1.0.0#/Auth
+
+  - name: Loan
+    description: Endpoint for managing loan application related processes
+    externalDocs:
+      url: https://app.swaggerhub.com/apis-docs/devteni/stock-manager-API/1.0.0#/Loan
+
+  - name: Portfolio
+    description: Endpoint for managing portfolio related processes
+    externalDocs:
+      url: https://app.swaggerhub.com/apis-docs/devteni/stock-manager-API/1.0.0#/Portfolio
+
+##### Components in the system
+components:
+  parameters:
+    # For Access Control
+    access_token:
+      in: header
+      name: x-access-token
+      required: true
+      schema:
+        type: string
+    user_id:
+      in: header
+      name: userId
+      required: true
+      schema:
+        type: string
+
+  schemas:
+    RegisterInfo:
+      type: object
+      properties:
+        firstname:
+          type: string
+        lastname:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+    LoginInfo:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+        firstname:
+          type: string
+        last  name:
+          type: string
+        age:
+          type: number
+        password:
+          type: string
+        email:
+          type: string
+        access_token:
+          type: string
+
+    Loan:
+      type: object
+      properties:
+        userId:
+          type: string
+        loanAmount:
+          type: string
+        loanPeriod:
+          type: string
+        loanInterest:
+          type: string
+        repaymentAmount:
+          type: string
+        monthlyRepayment:
+          type: number
+        amountPaid:
+          type: number
+        loanStatus:
+          type: string
+        periodLeft:
+          type: string
+
+    Asset:
+      type: object
+      properties:
+        userId:
+          type: string
+        symbol:
+          type: string
+        totalQuantity:
+          type: number
+        equityValue:
+          type: number
+        pricePerShare:
+          type: number
+    Error:
+      type: object
+      properties:
+        success:
+          type: boolean
+          default: false
+        message:
+          type: string
+        error:
+          type: object
