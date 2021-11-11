@@ -7,7 +7,7 @@ const catchAsync = require('../../utils/catchAsync');
 /* Profile controllers */
 exports.viewProfile = catchAsync(async (req, res) => {
   try {
-    let token =
+    const token =
       req.body.token || req.query.token || req.headers['x-access-token'];
     const userID = decodeUserWithToken(token);
     const { iat, exp, ...data } = userID;
@@ -19,10 +19,11 @@ exports.viewProfile = catchAsync(async (req, res) => {
   }
 });
 
+// eslint-disable-next-line consistent-return
 exports.updateProfile = catchAsync(async (req, res) => {
   try {
     const { action } = req.query;
-    let token =
+    const token =
       req.body.token || req.query.token || req.headers['x-access-token'];
     const userID = decodeUserWithToken(token);
     const { id } = userID;

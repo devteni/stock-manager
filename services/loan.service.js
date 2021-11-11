@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 const Loan = require('../models/loan.model');
 const AppError = require('../utils/AppError');
 

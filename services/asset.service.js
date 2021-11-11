@@ -20,7 +20,9 @@ const addNewAsset = async (assetDetails, id) => {
 };
 
 const updateExistingAsset = async (existingAsset, assetDetails) => {
+  // eslint-disable-next-line no-param-reassign
   existingAsset.totalQuantity += assetDetails.totalQuantity;
+  // eslint-disable-next-line no-param-reassign
   existingAsset.equityValue += assetDetails.equityValue;
   await existingAsset.save();
   return existingAsset;

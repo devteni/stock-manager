@@ -15,7 +15,7 @@ exports.addAssets = catchAsync(async (req, res) => {
     const asset_details = req.body;
 
     // get the userID
-    let token =
+    const token =
       req.body.token || req.query.token || req.headers['x-access-token'];
     const userID = decodeUserWithToken(token);
     const { id } = userID;
@@ -29,17 +29,16 @@ exports.addAssets = catchAsync(async (req, res) => {
       existingAsset.symbol === asset_details.symbol
     ) {
       await updateExistingAsset(existingAsset, asset_details);
-      return res.status(204).json({
-        status: 'success',
-        message: `${asset_details.totalQuantity}${asset_details.symbol} successfully added to your portfolio.`,
-      });
-    } else {
-      await addNewAsset(asset_details, id);
-      return res.status(200).json({
+      return res.status(201).json({
         status: 'success',
         message: `${asset_details.totalQuantity}${asset_details.symbol} successfully added to your portfolio.`,
       });
     }
+    await addNewAsset(asset_details, id);
+    return res.status(200).json({
+      status: 'success',
+      message: `${asset_details.totalQuantity}${asset_details.symbol} successfully added to your portfolio.`,
+    });
   } catch (error) {
     throw new AppError(`Error while adding assets: ${error}`, 500);
   }
@@ -50,7 +49,7 @@ exports.viewPortfolio = catchAsync(async (req, res) => {
     const { check_value } = req.query;
 
     // get the userID
-    let token =
+    const token =
       req.body.token || req.query.token || req.headers['x-access-token'];
     const userID = decodeUserWithToken(token);
     const { id } = userID;
@@ -64,9 +63,8 @@ exports.viewPortfolio = catchAsync(async (req, res) => {
           message: 'Your portfolio value:',
           data: portfolioVal,
         });
-      } else {
-        throw new AppError(`Error while getting portfolio value`, 500);
       }
+      throw new AppError('Error while getting portfolio value', 500);
     }
 
     // find assets with userId = id

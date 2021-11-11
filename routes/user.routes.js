@@ -43,7 +43,7 @@ router.post('/profile', verifyToken, updateProfile);
  *          application/json:
  *            schema:
  *              $ref: '#/components/schemas/Asset'
- *      '204':
+ *      '201':
  *        description: Asset
  *        content:
  *          application/json:
@@ -166,7 +166,7 @@ router.post('/loan/apply', verifyToken, getLoan);
  *     parameters:
  *      - $ref: '#/components/parameters/user_id'
  *     requestBody:
- *       description: loanPayment
+ *       description: amount
  *       required: true
  *       content:
  *         application/json:

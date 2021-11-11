@@ -1,26 +1,26 @@
+const bcrypt = require('bcryptjs');
 const User = require('../../models/user.model');
 // const speakeasy = require('speakeasy');
-const bcrypt = require('bcryptjs');
 const logger = require('../../utils/logger');
 // const sendOTP = require('../../utils/sendOTP');
 const AppError = require('../../utils/AppError');
 const { createToken } = require('../../utils/token');
 const catchAsync = require('../../utils/catchAsync');
 
-exports.signUp = catchAsync(async (req, res, next) => {
+exports.signUp = catchAsync(async (req, res) => {
   try {
     // recieve input values
-    logger.info(`We in the signup boy`);
-    let user_details = req.body;
-    let user_email = req.body.email;
+    const user_details = req.body;
+    const user_email = req.body.email;
 
     // check if user already exists in the database
     // check if user exists in database
     const existingUser = await User.findOne({ email: user_details.email });
-    if (existingUser)
+    if (existingUser) {
       return res
         .status(409)
         .json({ message: 'User with this email already exists ' });
+    }
 
     const salt = await bcrypt.gsenSalt(10);
     const hashedPass = await bcrypt.hash(user_details.password, salt);
@@ -32,8 +32,6 @@ exports.signUp = catchAsync(async (req, res, next) => {
       password: hashedPass,
       is_2fa_enabled: user_details.is_2fa_enabled,
     });
-
-    logger.info(`Okay`);
 
     // generate OTP for user if 2fa is enabled.
     // if(user_details.is_2fa_enabled == true){
@@ -48,9 +46,10 @@ exports.signUp = catchAsync(async (req, res, next) => {
     // }
 
     // create JWT for user
-    let access_token = createToken(newUser);
-    if (!access_token)
-      return new AppError(`Error while creating access token: ${error}`, 500);
+    const access_token = createToken(newUser);
+    if (!access_token) {
+      return new AppError('Error while creating access token:', 500);
+    }
 
     newUser.access_token = access_token;
 
@@ -67,28 +66,30 @@ exports.signUp = catchAsync(async (req, res, next) => {
   }
 });
 
-exports.logIn = catchAsync(async (req, res, next) => {
+exports.logIn = catchAsync(async (req, res) => {
   try {
     // get user credentials
     const { email, password } = req.body;
 
     // find user in the db
-    const existingUser = await User.findOne({ email: email });
-    if (!existingUser)
+    const existingUser = await User.findOne({ email });
+    if (!existingUser) {
       return res.status(400).json({
         message: 'User with this email does not exist in the database',
       });
+    }
 
     // verify user's password
     const pass = await bcrypt.compare(password, existingUser.password);
     if (!pass) return res.status(401).json({ message: 'Incorrect password!' });
 
     // create access token for user.
-    let access_token = createToken(existingUser);
-    if (!access_token)
-      return new AppError(`Error while creating access token: ${error}`, 500);
+    const access_token = createToken(existingUser);
+    if (!access_token) {
+      return new AppError('Error while creating access token:', 500);
+    }
 
-    logger.info(`Are we here?`);
+    logger.info('Are we here?');
     // update access token
     existingUser.access_token = access_token;
 

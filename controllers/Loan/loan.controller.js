@@ -15,7 +15,7 @@ exports.getLoan = catchAsync(async (req, res) => {
     const loanDetails = req.body;
     const { loanAmount, loanPeriod } = loanDetails;
 
-    let token =
+    const token =
       req.body.token || req.query.token || req.headers['x-access-token'];
     const userID = decodeUserWithToken(token);
     const { id } = userID;
@@ -57,7 +57,7 @@ exports.getLoan = catchAsync(async (req, res) => {
 
 exports.viewLoanProfile = catchAsync(async (req, res) => {
   try {
-    let token =
+    const token =
       req.body.token || req.query.token || req.headers['x-access-token'];
     const userID = decodeUserWithToken(token);
     const { id } = userID;
@@ -85,14 +85,14 @@ exports.payLoan = catchAsync(async (req, res) => {
   try {
     const loanPayment = req.body;
     const { amount } = loanPayment;
-    let token =
+    const token =
       req.body.token || req.query.token || req.headers['x-access-token'];
     const userID = decodeUserWithToken(token);
     const { id } = userID;
 
     // check if the loan status is not paid and proceed.
     const currentLoan = await pullLoanDetails(id);
-    let {
+    const {
       loanStatus,
       repaymentAmount,
       monthlyRepayment,
@@ -121,17 +121,16 @@ exports.payLoan = catchAsync(async (req, res) => {
         });
       }
       return;
-    } else {
-      // check if loan has been completely paid
-      if (currentLoan.repaymentAmount === currentLoan.amountPaid) {
-        currentLoan.loanStatus = 'paid';
-        res.status(201).json({
-          status: 'success',
-          message:
-            'Your loan has been balanced. You may apply for another now.',
-        });
-      }
     }
+    // check if loan has been completely paid
+    if (currentLoan.repaymentAmount === currentLoan.amountPaid) {
+      currentLoan.loanStatus = 'paid';
+      res.status(201).json({
+        status: 'success',
+        message: 'Your loan has been balanced. You may apply for another now.',
+      });
+    }
+
     await currentLoan.save();
     return;
   } catch (error) {

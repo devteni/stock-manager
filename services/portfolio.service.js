@@ -1,4 +1,7 @@
+/* eslint-disable guard-for-in */
+/* eslint-disable no-restricted-syntax */
 const Asset = require('../models/asset.model');
+const AppError = require('../utils/AppError');
 
 const getPortfolioValue = async (id) => {
   try {
