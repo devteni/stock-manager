@@ -1,4 +1,3 @@
-/* eslint-disable guard-for-in */
 /* eslint-disable no-restricted-syntax */
 const Asset = require('../models/asset.model');
 const AppError = require('../utils/AppError');
@@ -9,7 +8,7 @@ const getPortfolioValue = async (id) => {
     let portfolioVal = 0;
     let asset;
     for (asset in portfolio) {
-      portfolioVal += portfolio[`${asset}`].equityValue;
+      if (portfolio != null) portfolioVal += portfolio[`${asset}`].equityValue;
     }
     return portfolioVal;
   } catch (error) {
