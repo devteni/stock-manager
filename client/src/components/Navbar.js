@@ -1,53 +1,80 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const Links = [
   {
-    text: 'Home',
+    text: 'home',
     link: '/',
   },
   {
-    text: 'Login',
+    text: 'about',
+    link: '/about',
+  },
+  {
+    text: 'careers',
+    link: '/careers',
+  },
+  {
+    text: 'developers',
+    link: '/',
+  },
+];
+
+const authLinks = [
+  {
+    text: 'login',
     link: '/login',
   },
   {
-    text: 'Signup',
+    text: 'signup',
     link: '/signup',
   },
 ];
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const btn = document.getElementsByClassName('toggle-btn')[0];
 
   const handleClick = (e) => {
     const navlinks = document.getElementsByClassName('nav-links')[0];
-    console.log(navlinks);
-    if (isOpen) {
-      // set the display of the navlinks to block and display over other elements
+    if (!isOpen) {
       navlinks.style.display = 'flex';
       navlinks.style.flexDirection = 'column';
     } else {
       navlinks.style.display = 'none';
     }
-    setIsOpen(!isOpen);
+
+    return setIsOpen(!isOpen);
   };
   return (
     <nav className="nav">
-      <p className="logo">Stock manager</p>
-      <a href="#" className="toggle-btn" onClick={() => handleClick()}>
-        <span className="bar"></span>
-        <span className="bar"></span>
-        <span className="bar"></span>
-      </a>
-      <ul className="hidden nav-links" id="nav-links">
+      <p className="logo" style={{ fontStyle: 'italic', color: 'black' }}>
+        Stock manager
+      </p>
+
+      <ul className="nav-links" id="nav-links">
         {Links.map((link, i) => {
           return (
             <li key={i} className="nav-link">
-              {link.text}
+              <Link to={link.link}>{link.text}</Link>
             </li>
           );
         })}
+
+        <ul className="" id="authLinks">
+          {authLinks.map((link, i) => {
+            return (
+              <li key={i} className="nav-link">
+                <Link to={link.link}>{link.text}</Link>
+              </li>
+            );
+          })}
+        </ul>
       </ul>
+
+      <span className="toggle-btn" onClick={() => handleClick()}>
+        <span className="bar"></span>
+        <span className="bar"></span>
+      </span>
     </nav>
   );
 };
