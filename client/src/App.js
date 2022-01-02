@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import routes from './routes';
 import './App.css';
@@ -11,7 +12,17 @@ function App() {
         <Navbar />
         <Routes>
           {routes.map((route, i) => {
-            return <Route key={i} path={route.path} element={route.element} />;
+            return (
+              <Route
+                key={i}
+                path={route.path}
+                element={
+                  <Suspense fallback={<>...</>}>
+                    <route.element />
+                  </Suspense>
+                }
+              />
+            );
           })}
         </Routes>
       </div>
