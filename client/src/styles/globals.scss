@@ -2,6 +2,12 @@ li {
   list-style-type: none;
 }
 
+.logo {
+  color: blue;
+  font-weight: lighter;
+  padding: 1em;
+}
+
 .nav {
   display: flex;
   flex-direction: row;
@@ -67,7 +73,7 @@ li {
     .bar {
       height: 0.3rem;
       width: 100%;
-      background-color: black;
+      background-color: blue;
       margin: auto;
       border-radius: 3px;
 
@@ -84,7 +90,8 @@ li {
 
     .nav-links {
       position: absolute;
-      width: 50%;
+      width: 80%;
+      backdrop-filter: blur(90px);
       top: 10%;
       right: 10%;
       flex-direction: column;

@@ -19,7 +19,7 @@ const router = Router();
  *           schema:
  *            $ref: '#/components/schemas/RegisterInfo'
  *     responses:
- *      '200':
+ *      '201':
  *        description: User registered successfully
  *        content:
  *          application/json:

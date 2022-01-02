@@ -1,22 +1,20 @@
-import Home from './pages/Home';
-import Login from './pages/Login';
-import Signup from './pages/Signup';
+import { lazy } from 'react';
 
 const routes = [
   {
     path: '/',
     exact: true,
-    element: <Home />,
+    element: lazy(() => import('./pages/Home')),
   },
   {
     path: '/login',
     exact: true,
-    element: <Login />,
+    element: lazy(() => import('./pages/Login')),
   },
   {
     path: '/signup',
     exact: true,
-    element: <Signup />,
+    element: lazy(() => import('./pages/Signup')),
   },
 ];
 
