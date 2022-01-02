@@ -41,14 +41,12 @@ const Navbar = () => {
   };
   return (
     <nav className="nav">
-      <p className="logo" style={{ fontStyle: 'italic', color: 'black' }}>
-        Stock manager
-      </p>
+      <p className="logo">Stock manager</p>
 
       <ul className="hidden nav-links" id="nav-links">
         {Links.map((link, i) => {
           return (
-            <li key={i} className="nav-link">
+            <li key={i} className="nav-link" onClick={handleClick}>
               <Link to={link.link}>{link.text}</Link>
             </li>
           );
@@ -57,7 +55,7 @@ const Navbar = () => {
         <ul className="" id="authLinks">
           {authLinks.map((link, i) => {
             return (
-              <li key={i} className="nav-link">
+              <li key={i} className="nav-link" onClick={handleClick}>
                 <Link to={link.link}>{link.text}</Link>
               </li>
             );
