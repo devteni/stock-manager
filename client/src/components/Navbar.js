@@ -36,14 +36,8 @@ const Navbar = () => {
 
   const handleClick = (e) => {
     const navlinks = document.getElementsByClassName('nav-links')[0];
-    if (!isOpen) {
-      navlinks.style.display = 'flex';
-      navlinks.style.flexDirection = 'column';
-    } else {
-      navlinks.style.display = 'none';
-    }
-
-    return setIsOpen(!isOpen);
+    navlinks.classList.toggle('hidden');
+    setIsOpen(!isOpen);
   };
   return (
     <nav className="nav">
@@ -51,7 +45,7 @@ const Navbar = () => {
         Stock manager
       </p>
 
-      <ul className="nav-links" id="nav-links">
+      <ul className="hidden nav-links" id="nav-links">
         {Links.map((link, i) => {
           return (
             <li key={i} className="nav-link">
