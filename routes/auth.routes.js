@@ -5,7 +5,7 @@ const router = Router();
 
 /**
  * @swagger
- * /auth/signup:
+ * /signup:
  *   post:
  *     tags:
  *      - Auth
@@ -48,7 +48,7 @@ router.post('/signup', signUp);
 
 /**
  * @swagger
- * /auth/login:
+ * /login:
  *   post:
  *     tags:
  *      - Auth

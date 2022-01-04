@@ -22,7 +22,7 @@ exports.signUp = catchAsync(async (req, res) => {
         .json({ message: 'User with this email already exists ' });
     }
 
-    const salt = await bcrypt.gsenSalt(10);
+    const salt = await bcrypt.genSalt(10);
     const hashedPass = await bcrypt.hash(user_details.password, salt);
     const newUser = await User.create({
       firstname: user_details.firstname,
