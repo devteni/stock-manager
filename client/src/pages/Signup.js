@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import * as yup from 'yup';
 import { Form, Field, Formik } from 'formik';
+import { baseURL } from '../constants';
 
 const SignUpSchema = yup.object().shape({
   firstname: yup.string().required('Firstname is required'),
@@ -21,33 +22,37 @@ const initialValues = {
 };
 
 const Signup = () => {
-  // const [formValues, setFormValues] = useState(initialValues);
-
-  // custom handleChange function
-  /*const handleChange = (e) => {
-    const { name, value } = e.currentTarget;
-    console.log(e.currentTarget.value)
-    setFormValues({ ...formValues, [name]: value });
-  };*/
-
   const validBtn =
     'text-white p-4 font-bold tracking-tighter bg-blue-700 w-full mt-6 outline-none appearance-none border-none focus:ring-4 focus:ring-gray-400';
   const disabledBtn =
     'text-white p-4 font-bold tracking-tighter bg-gray-500 w-full mt-6 outline-none appearance-none border-none focus:ring-4 focus:ring-gray-400';
-  const handleSubmit = (values) => {
-    return console.log(values);
-  };
 
+  const onSubmit = async (values) => {
+    // send the values as a payload to server's signup endpoint asynchronously
+    console.log(JSON.stringify(values, null, 2));
+    let res = await fetch(`${baseURL}/signup`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(values, null, 2),
+    });
+    res = await res.json();
+    console.log(res.message);
+    // display a success response
+  };
   return (
     <Formik
       initialValues={initialValues}
       validationSchema={SignUpSchema}
-      onSubmit={handleSubmit}
+      onSubmit={onSubmit}
     >
       {(formik) => {
         let {
           values,
           handleChange,
+          handleSubmit,
           handleBlur,
           isValid,
           dirty,

@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import * as yup from 'yup';
 import { Form, Field, Formik } from 'formik';
+import { baseURL } from '../constants';
 
 const LogInSchema = yup.object().shape({
   email: yup.string().email().required('Email is required'),
@@ -21,14 +22,27 @@ const Login = () => {
   const disabledBtn =
     'text-white p-4 font-bold tracking-tighter bg-gray-500 w-full mt-6 outline-none appearance-none border-none focus:ring-4 focus:ring-gray-400';
 
-  const handleSubmit = () => {
-    return null;
+  const onSubmit = async (values) => {
+    // send the values as a payload to server's signup endpoint asynchronously
+    console.log(JSON.stringify(values, null, 2));
+    let res = await fetch(`${baseURL}/login`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(values, null, 2),
+    });
+    res = await res.json();
+    console.log(res.message, res.access_token);
+    // display a success response
   };
+
   return (
     <Formik
       initialValues={initialValues}
       validationSchema={LogInSchema}
-      onSubmit={handleSubmit}
+      onSubmit={onSubmit}
     >
       {(formik) => {
         let {
@@ -51,11 +65,7 @@ const Login = () => {
                 </p>
 
                 <div className="md:flex-1 flex-auto flex-wrap mt-6">
-                  <Form
-                    onSubmit={handleSubmit}
-                    method="POST"
-                    className="p-2 w-auto"
-                  >
+                  <Form method="POST" className="p-2 w-auto">
                     <div className="w-full mt-4">
                       <label
                         htmlFor="email"
