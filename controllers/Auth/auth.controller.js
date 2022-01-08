@@ -17,9 +17,10 @@ exports.signUp = catchAsync(async (req, res) => {
     // check if user exists in database
     const existingUser = await User.findOne({ email: user_details.email });
     if (existingUser) {
-      return res
-        .status(409)
-        .json({ message: 'User with this email already exists ' });
+      return res.status(409).json({
+        status: 'failed',
+        message: 'User with this email already exists ',
+      });
     }
 
     const salt = await bcrypt.genSalt(10);
@@ -75,13 +76,18 @@ exports.logIn = catchAsync(async (req, res) => {
     const existingUser = await User.findOne({ email });
     if (!existingUser) {
       return res.status(400).json({
+        status: 'failed',
         message: 'User with this email does not exist in the database',
       });
     }
 
     // verify user's password
     const pass = await bcrypt.compare(password, existingUser.password);
-    if (!pass) return res.status(401).json({ message: 'Incorrect password!' });
+    if (!pass) {
+      return res
+        .status(401)
+        .json({ status: 'failed', message: 'Incorrect password!' });
+    }
 
     // create access token for user.
     const access_token = createToken(existingUser);

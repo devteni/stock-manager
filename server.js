@@ -10,7 +10,7 @@ const server = http.createServer(app);
 const runServer = async () => {
   database();
   server.listen(PORT, () => {
-    console.log(`[SERVER]:--------->\nServer is running on port ${PORT}`);
+    console.log(`[SERVER]:-------->\nServer is running on port ${PORT}`);
   });
 };
 
