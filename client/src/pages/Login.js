@@ -1,7 +1,9 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import * as yup from 'yup';
 import { Form, Field, Formik } from 'formik';
 import { baseURL } from '../constants';
+import axios from 'axios';
 
 const LogInSchema = yup.object().shape({
   email: yup.string().email().required('Email is required'),
@@ -17,25 +19,32 @@ const initialValues = {
 };
 
 const Login = () => {
+  const [response, setResponse] = useState(null);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(true);
+
   const validBtn =
     'text-white p-4 font-bold tracking-tighter bg-blue-700 w-full mt-6 outline-none appearance-none border-none focus:ring-4 focus:ring-gray-400';
   const disabledBtn =
     'text-white p-4 font-bold tracking-tighter bg-gray-500 w-full mt-6 outline-none appearance-none border-none focus:ring-4 focus:ring-gray-400';
 
-  const onSubmit = async (values) => {
-    // send the values as a payload to server's signup endpoint asynchronously
-    console.log(JSON.stringify(values, null, 2));
-    let res = await fetch(`${baseURL}/login`, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(values, null, 2),
-    });
-    res = await res.json();
-    console.log(res.message, res.access_token);
-    // display a success response
+  const onSubmit = (values) => {
+    axios
+      .post(`${baseURL}/login`, values)
+      .then((res) => {
+        setResponse(res.data);
+      })
+      .catch((err) => {
+        if (err.response) {
+          console.log(err.response.data);
+          let errRes = err.response.data;
+          setResponse(errRes);
+        } else if (err.request) {
+          console.log(err.req);
+          setError(err.request);
+        }
+      });
+    setLoading(false);
   };
 
   return (
@@ -48,6 +57,7 @@ const Login = () => {
         let {
           values,
           handleChange,
+          handleSubmit,
           handleBlur,
           isValid,
           dirty,
@@ -65,7 +75,27 @@ const Login = () => {
                 </p>
 
                 <div className="md:flex-1 flex-auto flex-wrap mt-6">
-                  <Form method="POST" className="p-2 w-auto">
+                  <Form
+                    onSubmit={handleSubmit}
+                    method="POST"
+                    className="p-2 w-auto"
+                  >
+                    <>
+                      {
+                        // if response is an error ? display a node with red bg : blue bg
+                        response !== null ? (
+                          response.status === 'success' ? (
+                            <span className="p-3 text-gray-100 bg-green-400 shadow-lg rounded-lg opacity-1 mx-14 lg:m-[230px]">
+                              {response.message}
+                            </span>
+                          ) : (
+                            <span className="p-3 text-gray-100 bg-red-500 shadow-lg rounded-lg opacity-1 mx-14 lg:m-[230px]">
+                              {response.message}
+                            </span>
+                          )
+                        ) : null
+                      }
+                    </>
                     <div className="w-full mt-4">
                       <label
                         htmlFor="email"

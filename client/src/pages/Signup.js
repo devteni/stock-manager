@@ -1,6 +1,8 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import * as yup from 'yup';
 import { Form, Field, Formik } from 'formik';
+import axios from 'axios';
 import { baseURL } from '../constants';
 
 const SignUpSchema = yup.object().shape({
@@ -22,25 +24,33 @@ const initialValues = {
 };
 
 const Signup = () => {
+  const [response, setResponse] = useState(null);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(true);
+
   const validBtn =
     'text-white p-4 font-bold tracking-tighter bg-blue-700 w-full mt-6 outline-none appearance-none border-none focus:ring-4 focus:ring-gray-400';
   const disabledBtn =
     'text-white p-4 font-bold tracking-tighter bg-gray-500 w-full mt-6 outline-none appearance-none border-none focus:ring-4 focus:ring-gray-400';
 
   const onSubmit = async (values) => {
-    // send the values as a payload to server's signup endpoint asynchronously
-    console.log(JSON.stringify(values, null, 2));
-    let res = await fetch(`${baseURL}/signup`, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(values, null, 2),
-    });
-    res = await res.json();
-    console.log(res.message);
-    // display a success response
+    // call a function that takes in
+    axios
+      .post(`${baseURL}/signup`, values)
+      .then((res) => {
+        setResponse(res.data);
+      })
+      .catch((err) => {
+        if (err.response) {
+          console.log(err.response.data);
+          let errRes = err.response.data;
+          setResponse(errRes);
+        } else if (err.request) {
+          console.log(err.req);
+          setError(err.request);
+        }
+      });
+    setLoading(false);
   };
   return (
     <Formik
@@ -58,6 +68,7 @@ const Signup = () => {
           dirty,
           errors,
           touched,
+          isSubmitting,
         } = formik;
 
         return (
@@ -76,6 +87,22 @@ const Signup = () => {
                   method="POST"
                   className="p-2 w-auto"
                 >
+                  <>
+                    {
+                      // if response is an error ? display a node with red bg : blue bg
+                      response !== null ? (
+                        response.status === 'success' ? (
+                          <span className="p-3 text-gray-100 bg-blue-500 shadow-lg rounded-lg opacity-1 mx-14 lg:m-[230px]">
+                            {response.message}
+                          </span>
+                        ) : (
+                          <span className="p-3 text-gray-100 bg-gray-500 shadow-lg rounded-lg opacity-1 mx-14 lg:m-[230px]">
+                            {response.message}
+                          </span>
+                        )
+                      ) : null
+                    }
+                  </>
                   <div className="grid gap-2 grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-2">
                     <div className="w-full mt-4">
                       <label
@@ -171,7 +198,7 @@ const Signup = () => {
                   <button
                     type="submit"
                     className={!(dirty && isValid) ? disabledBtn : validBtn}
-                    disabled={!(dirty && isValid)}
+                    disabled={isSubmitting}
                   >
                     Sign up
                   </button>
