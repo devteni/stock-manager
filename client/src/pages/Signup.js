@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import * as yup from 'yup';
 import { Form, Field, Formik } from 'formik';
 import axios from 'axios';
 import { baseURL } from '../constants';
+import { GlobalContext } from '../context/AuthContext';
 
 const SignUpSchema = yup.object().shape({
   firstname: yup.string().required('Firstname is required'),
@@ -39,6 +40,7 @@ const Signup = () => {
       .post(`${baseURL}/signup`, values)
       .then((res) => {
         setResponse(res.data);
+        setLoading(false);
       })
       .catch((err) => {
         if (err.response) {
@@ -50,7 +52,6 @@ const Signup = () => {
           setError(err.request);
         }
       });
-    setLoading(false);
   };
   return (
     <Formik
