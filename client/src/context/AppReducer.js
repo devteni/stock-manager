@@ -5,7 +5,7 @@ const ACTIONS = {
 const AppReducer = (state, action) => {
   switch (action.type) {
     case ACTIONS.SET_USER:
-      return null;
+      return {};
     default:
       return state;
   }

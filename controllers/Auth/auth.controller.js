@@ -1,7 +1,6 @@
 const bcrypt = require('bcryptjs');
 const User = require('../../models/user.model');
 // const speakeasy = require('speakeasy');
-const logger = require('../../utils/logger');
 // const sendOTP = require('../../utils/sendOTP');
 const AppError = require('../../utils/AppError');
 const { createToken } = require('../../utils/token');
@@ -95,13 +94,14 @@ exports.logIn = catchAsync(async (req, res) => {
       return new AppError('Error while creating access token:', 500);
     }
 
-    logger.info('Are we here?');
     // update access token
     existingUser.access_token = access_token;
 
-    return res
-      .status(200)
-      .json({ status: 'success', message: 'login successful!', access_token });
+    return res.status(200).json({
+      status: 'success',
+      message: 'login successful!',
+      data: access_token,
+    });
   } catch (error) {
     throw new AppError(`Error while logging in: ${error}`, 500);
   }
