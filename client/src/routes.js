@@ -1,4 +1,5 @@
 import { lazy } from 'react';
+import AuthGuard from './components/AuthGuard';
 
 const routes = [
   {
@@ -15,6 +16,12 @@ const routes = [
     path: '/signup',
     exact: true,
     element: lazy(() => import('./pages/Signup')),
+  },
+  {
+    path: '/dashboard',
+    exact: true,
+    guard: AuthGuard,
+    element: lazy(() => import('./pages/Dashboard')),
   },
 ];
 
