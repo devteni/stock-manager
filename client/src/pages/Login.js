@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import * as yup from 'yup';
 import { Form, Field, Formik } from 'formik';
 import { baseURL } from '../constants';
 import axios from 'axios';
+import { GlobalContext } from '../context/GlobalState';
 
 const LogInSchema = yup.object().shape({
   email: yup.string().email().required('Email is required'),
@@ -19,6 +20,7 @@ const initialValues = {
 };
 
 const Login = () => {
+  const { user } = useContext(GlobalContext);
   const [response, setResponse] = useState(null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
@@ -32,7 +34,11 @@ const Login = () => {
     axios
       .post(`${baseURL}/login`, values)
       .then((res) => {
+        console.log(res);
+        setLoading(false);
         setResponse(res.data);
+        user.isAuthenticated = true;
+        user.token = res.data.data;
       })
       .catch((err) => {
         if (err.response) {
@@ -44,7 +50,6 @@ const Login = () => {
           setError(err.request);
         }
       });
-    setLoading(false);
   };
 
   return (
@@ -59,10 +64,12 @@ const Login = () => {
           handleChange,
           handleSubmit,
           handleBlur,
+          isSubmitting,
           isValid,
           dirty,
           errors,
           touched,
+          resetForm,
         } = formik;
 
         return (
@@ -141,7 +148,7 @@ const Login = () => {
                     <button
                       type="submit"
                       className={!(dirty && isValid) ? disabledBtn : validBtn}
-                      disabled={!(dirty && isValid)}
+                      disabled={isSubmitting}
                     >
                       Log in
                     </button>
