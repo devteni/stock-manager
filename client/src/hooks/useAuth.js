@@ -1,8 +1,8 @@
 import { useContext } from 'react';
-import { GlobalContext } from '../context/GlobalState';
+import { AuthContext } from '../context/AuthContext';
 
 const useAuth = () => {
-  const { user } = useContext(GlobalContext);
+  const { user } = useContext(AuthContext);
   return { isAuthenticated: user.isAuthenticated };
 };
 
