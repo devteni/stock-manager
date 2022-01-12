@@ -1,10 +1,9 @@
-import { useEffect, useState, useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 import { Form, Field, Formik } from 'formik';
 import axios from 'axios';
 import { baseURL } from '../constants';
-import { GlobalContext } from '../context/AuthContext';
 
 const SignUpSchema = yup.object().shape({
   firstname: yup.string().required('Firstname is required'),
@@ -28,6 +27,7 @@ const Signup = () => {
   const [response, setResponse] = useState(null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   const validBtn =
     'text-white p-4 font-bold tracking-tighter bg-blue-700 w-full mt-6 outline-none appearance-none border-none focus:ring-4 focus:ring-gray-400';
@@ -36,22 +36,24 @@ const Signup = () => {
 
   const onSubmit = async (values) => {
     // call a function that takes in
-    axios
-      .post(`${baseURL}/signup`, values)
-      .then((res) => {
-        setResponse(res.data);
+    try {
+      const res = await axios.post(`${baseURL}/signup`, values);
+      if (!res.ok) {
         setLoading(false);
-      })
-      .catch((err) => {
-        if (err.response) {
-          console.log(err.response.data);
-          let errRes = err.response.data;
-          setResponse(errRes);
-        } else if (err.request) {
-          console.log(err.req);
-          setError(err.request);
-        }
-      });
+        setResponse(res.data);
+        // Redirect to login page
+        // setTimeout(() => navigate('/login'), 3000)
+      }
+    } catch (err) {
+      if (err.response) {
+        console.log(err.response.data);
+        let errRes = err.response.data;
+        setResponse(errRes);
+      } else if (err.request) {
+        console.log(err.req);
+        setError(err.request);
+      }
+    }
   };
   return (
     <Formik

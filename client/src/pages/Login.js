@@ -1,10 +1,10 @@
 import { useState, useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import * as yup from 'yup';
 import { Form, Field, Formik } from 'formik';
 import { baseURL } from '../constants';
 import axios from 'axios';
-import { GlobalContext } from '../context/GlobalState';
+import { AuthContext } from '../context/AuthContext';
 
 const LogInSchema = yup.object().shape({
   email: yup.string().email().required('Email is required'),
@@ -20,36 +20,40 @@ const initialValues = {
 };
 
 const Login = () => {
-  const { user } = useContext(GlobalContext);
+  const { user } = useContext(AuthContext);
   const [response, setResponse] = useState(null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
+  const location = useLocation();
+  const navigate = useNavigate();
+  let from = location.state?.from?.pathname || '/dashboard';
 
   const validBtn =
     'text-white p-4 font-bold tracking-tighter bg-blue-700 w-full mt-6 outline-none appearance-none border-none focus:ring-4 focus:ring-gray-400';
   const disabledBtn =
     'text-white p-4 font-bold tracking-tighter bg-gray-500 w-full mt-6 outline-none appearance-none border-none focus:ring-4 focus:ring-gray-400';
 
-  const onSubmit = (values) => {
-    axios
-      .post(`${baseURL}/login`, values)
-      .then((res) => {
-        console.log(res);
+  const onSubmit = async (values) => {
+    try {
+      const res = await axios.post(`${baseURL}/login`, values);
+      if (!res.ok) {
         setLoading(false);
         setResponse(res.data);
+        const { token } = res.data;
         user.isAuthenticated = true;
-        user.token = res.data.data;
-      })
-      .catch((err) => {
-        if (err.response) {
-          console.log(err.response.data);
-          let errRes = err.response.data;
-          setResponse(errRes);
-        } else if (err.request) {
-          console.log(err.req);
-          setError(err.request);
-        }
-      });
+        user.token = token;
+        localStorage.setItem('token', token);
+        return navigate(from, { replace: true });
+      }
+    } catch (err) {
+      if (err.response) {
+        let errRes = err.response.data;
+        setResponse(errRes);
+      } else if (err.request) {
+        console.log(err.req);
+        setError(err.request);
+      }
+    }
   };
 
   return (
