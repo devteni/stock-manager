@@ -100,7 +100,7 @@ exports.logIn = catchAsync(async (req, res) => {
     return res.status(200).json({
       status: 'success',
       message: 'login successful!',
-      data: access_token,
+      token: access_token,
     });
   } catch (error) {
     throw new AppError(`Error while logging in: ${error}`, 500);
