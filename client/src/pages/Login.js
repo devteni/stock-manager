@@ -5,6 +5,7 @@ import { Form, Field, Formik } from 'formik';
 import { baseURL } from '../constants';
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
+import { setUser } from '../utils/setUser';
 
 const LogInSchema = yup.object().shape({
   email: yup.string().email().required('Email is required'),
@@ -39,10 +40,7 @@ const Login = () => {
       if (!res.ok) {
         setLoading(false);
         setResponse(res.data);
-        const { token } = res.data;
-        user.isAuthenticated = true;
-        user.token = token;
-        localStorage.setItem('token', token);
+        setUser({ user, data: res.data });
         return navigate(from, { replace: true });
       }
     } catch (err) {
