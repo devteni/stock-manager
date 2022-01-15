@@ -41,6 +41,8 @@ const Login = () => {
         setLoading(false);
         setResponse(res.data);
         setUser({ user, data: res.data });
+        // user.isAuthenticated = true;
+        // user.token = res.data.token;
         return navigate(from, { replace: true });
       }
     } catch (err) {

@@ -21,7 +21,19 @@ const routes = [
     path: '/dashboard',
     exact: true,
     guard: AuthGuard,
-    element: lazy(() => import('./pages/Dashboard')),
+    element: lazy(() => import('./pages/ProfileHome')),
+  },
+  {
+    path: '/dashboard/portfolio',
+    exact: true,
+    guard: AuthGuard,
+    element: lazy(() => import('./pages/Portfolio')),
+  },
+  {
+    path: '/dashboard/loan',
+    exact: true,
+    guard: AuthGuard,
+    element: lazy(() => import('./pages/Loan')),
   },
 ];
 
