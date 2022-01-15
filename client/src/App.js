@@ -2,6 +2,7 @@ import { Suspense, Fragment } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import routes from './routes';
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles/globals.scss';
 import Navbar from './components/Navbar';
 import { AuthProvider } from './context/AuthContext';
