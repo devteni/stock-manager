@@ -27,7 +27,7 @@ app.get('/', (req, res) => {
 app.use(apiRoutes);
 
 // handle unknown routes
-app.get('*', (req, res) => {
+app.all('*', (req, res) => {
   res.send('404 error! Route does not exist.');
 });
 

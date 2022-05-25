@@ -4,15 +4,15 @@ const {
   viewLoanProfile,
   getLoan,
   payLoan,
-} = require('../controllers/Loan/loan.controller');
+} = require('../controllers/finance/loan.controller');
 const {
   viewProfile,
   updateProfile,
-} = require('../controllers/Auth/profile.controller');
+} = require('../controllers/user/profile.controller');
 const {
   viewPortfolio,
   addAssets,
-} = require('../controllers/Portfolio/portfolio.controller');
+} = require('../controllers/portfolio/portfolio.controller');
 
 const router = Router();
 
